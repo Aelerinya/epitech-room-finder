@@ -1,5 +1,5 @@
 {
-  "name": "Epitech room finder",
+  "name": "epitech-room-finder",
   "version": "0.1.0",
   "description": "Saves you the headache of finding the best room to work in",
   "main": "index.js",
