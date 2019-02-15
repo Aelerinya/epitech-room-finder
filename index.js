@@ -5,8 +5,6 @@
 ** retrieve planning
 */
 
-const _ = require('lodash')
-const Promise = require('promise')
 const Intranet = require('intra-api')
 var Intra = undefined
 var config = undefined
@@ -21,7 +19,7 @@ function parseRoomCode(code) {
   }
 }
 
-function init (token, login, city, rooms) {
+module.exports.init = function (token, login, city, rooms) {
   config = {
     token: token,
     login: login,
@@ -32,7 +30,7 @@ function init (token, login, city, rooms) {
   Intra = new Intranet(token, login)
 }
 
-function find (date) {
+module.exports.find = function (date) {
   return new Promise(function (resolve, reject) {
     if (config === undefined) {
       reject("Call .init() first")
@@ -40,7 +38,7 @@ function find (date) {
     Intra
     .planning
     .get({startDate: date, endDate: date})
-    .then((res) => {
+    .then(function (res) {
       // Initialize rooms array
       var roomsList = {}
       for (room of config.rooms) {
@@ -49,7 +47,7 @@ function find (date) {
       // Count occupations of each room
       for (activity of res) {
         // Verify if the activy has a room, if it is in the good city
-        if (!_.isNull(activity.room) && !_.isUndefined(activity.room.code)) {
+        if (activity.room !== null && activity.room.code != undefined) {
           room = parseRoomCode(activity.room.code)
           if (room.city == config.city) {
             roomName = room.name
@@ -71,14 +69,11 @@ function find (date) {
         availableRooms.push(name)
       }
       // Return the room list
-      console.log(roomsList);
       resolve(availableRooms)
     })
-    .catch((err) => {
+    .catch(function (err) {
       console.error(err);
       reject(err)
     })
   })
 }
-
-module.exports = {find: find, init: init}
