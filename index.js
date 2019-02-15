@@ -17,7 +17,7 @@ function parseRoomCode(code) {
     country: segments[0],
     city: segments[1],
     building: segments[2],
-    room: segments[3]
+    name: segments[3]
   }
 }
 
@@ -26,7 +26,8 @@ function init (token, login, city, rooms) {
     token: token,
     login: login,
     city: city,
-    rooms: rooms
+    rooms: rooms.rooms,
+    alias: rooms.alias
   }
   Intra = new Intranet(token, login)
 }
@@ -41,20 +42,23 @@ function find (date) {
     .get({startDate: date, endDate: date})
     .then((res) => {
       // Initialize rooms array
-      var roomsList = _.clone(config.rooms)
+      var roomsList = {}
+      for (room of config.rooms) {
+        roomsList[room] = 0
+      }
       // Count occupations of each room
       for (activity of res) {
-        // Verify if the activy has a room, if it is in the good building
+        // Verify if the activy has a room, if it is in the good city
         if (!_.isNull(activity.room) && !_.isUndefined(activity.room.code)) {
           room = parseRoomCode(activity.room.code)
           if (room.city == config.city) {
-            // Redirect partial rooms to full rooms
-            roomName = room.room
-            if (roomName in roomsList && _.isString(roomsList[roomName])) {
-              roomName = roomsList[roomName]
+            roomName = room.name
+            // Redirect aliases rooms to full rooms
+            if (roomName in config.alias) {
+              roomsList[config.alias[roomName]]++
             }
             // Increase usage of room
-            if (roomName in roomsList) {
+            if (config.rooms.includes(roomName)) {
               roomsList[roomName]++
             }
           }
@@ -67,6 +71,7 @@ function find (date) {
         availableRooms.push(name)
       }
       // Return the room list
+      console.log(roomsList);
       resolve(availableRooms)
     })
     .catch((err) => {
