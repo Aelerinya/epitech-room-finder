@@ -30,7 +30,7 @@ finder.find(date)
 - token: lien d'autologin récupéré dans l'onglet administration de l'Intra
 - login: adresse mail \@epitech.eu
 - city: code en trois lettre de la ville (ex: `LYN` pour Lyon)
-- roomList: liste des salles à analyser. Des alias permettent de préciser qu'une salle est inclue dans une autre salle. Cette liste est un objet JSON suivant ce modèle :
+- roomList: liste des salles à analyser. Des alias permettent de préciser les croisements entre les salles. Cette liste est un objet JSON suivant ce modèle :
 ```json
 {
   "rooms": [
@@ -42,6 +42,7 @@ finder.find(date)
   "alias": {
     "salle 1.1": "salle 1",
     "salle 1.2": "salle 1",
+    "salle 1": ["salle 1.1", "salle 1.2"]
   }
 }
 ```

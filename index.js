@@ -34,7 +34,13 @@ module.exports.find = async function (date) {
   if (config === undefined) {
     throw new Error("Call .init() first")
   }
-  let events = await Intra.planning.get({startDate: date, endDate: date})
+  try {
+    var events = await Intra.planning.get({startDate: date, endDate: date})
+  } catch (err) {
+    console.log('Could not retrieve planning')
+    console.log(err)
+    throw new Error(err)
+  }
   // Initialize rooms array
   var roomsList = {}
   for (room of config.rooms) {
@@ -49,7 +55,14 @@ module.exports.find = async function (date) {
         roomName = room.name
         // Redirect aliases rooms to full rooms
         if (roomName in config.alias) {
-          roomsList[config.alias[roomName]]++
+          alias = config.alias[roomName]
+          if (alias.constructor === Array) {
+            for (r of alias) {
+              roomsList[r]++
+            }
+          } else {
+          roomsList[alias]++
+          }
         }
         // Increase usage of room
         if (config.rooms.includes(roomName)) {
