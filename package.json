@@ -1,14 +1,14 @@
 {
   "name": "epitech-room-finder",
-  "version": "0.1.4",
-  "description": "Saves you the headache of finding the best room to work in",
+  "version": "0.1.5",
+  "description": "Saves you the headache of finding the best room to work in in Epitech",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ersikan/epitech-room-manager"
+    "url": "https://github.com/Ersikan/epitech-room-finder"
   },
   "keywords": [
     "epitech"
@@ -16,7 +16,6 @@
   "author": "Julien Philippon",
   "license": "ISC",
   "dependencies": {
-    "intra-api": "^1.0.3",
-    "promise": "^8.0.2"
+    "intra-api": "^1.0.3"
   }
 }
