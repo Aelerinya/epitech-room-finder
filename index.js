@@ -46,6 +46,10 @@ module.exports.find = async function (date) {
   for (room of config.rooms) {
     roomsList[room] = 0
   }
+  // Verify if there is no activity this day
+  if (Object.keys(events).length === 0) {
+    return config.rooms
+  }
   // Count occupations of each room
   for (activity of events) {
     // Verify if the activy has a room, if it is in the good city
